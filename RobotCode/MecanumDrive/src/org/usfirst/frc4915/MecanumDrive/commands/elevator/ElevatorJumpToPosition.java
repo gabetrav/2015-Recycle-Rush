@@ -13,11 +13,10 @@ public class ElevatorJumpToPosition extends Command {
 	// of.
 	private double positionNumber;
 
-	public ElevatorJumpToPosition(double d) {
-
+	public ElevatorJumpToPosition(double position) {
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
-		positionNumber = d;
+		positionNumber = position;
 	}
 
 	// Called just before this Command runs the first time

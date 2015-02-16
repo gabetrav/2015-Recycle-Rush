@@ -13,13 +13,11 @@ import edu.wpi.first.wpilibj.command.Command;
 public class MoveStraightPositionModeCommand extends Command {
 	public static List<CANTalon> motors = DriveTrain.motors;
 	public double inputDistance;
-	public double inputSpeed;
 	private DriveTrain driveTrain = Robot.driveTrain;
 
-	public MoveStraightPositionModeCommand(double inputDistance, double inputSpeed) {
+	public MoveStraightPositionModeCommand(double inputDistance) {
 		requires(driveTrain);
-		System.out.println("***MoveStraightPositionModeCommand inputDistance: " + inputDistance + "*******");
-		System.out.println("***MoveStraightPositionModeCommand inputSpeed: " + inputSpeed + "*******");
+        Robot.debugger.logError(CustomDebugger.LoggerNames.DRIVETRAIN, "***MoveStraightPositionModeCommand inputDistance: " + inputDistance + "*******");
 		this.inputDistance = inputDistance;
 		// Use requires() here to declare subsystem dependencies
 		// eg. requires(chassis);
@@ -42,7 +40,7 @@ public class MoveStraightPositionModeCommand extends Command {
 			CANTalon motor = motors.get(i);
 
 			double startingTickValue = motor.getPosition();
-			double endValue = startingTickValue + ticksToMove;
+			Double endValue = startingTickValue + ticksToMove;
 			if (i >= 2) {
 				// right motors are inverted
 				endValue = startingTickValue - ticksToMove;
@@ -61,19 +59,18 @@ public class MoveStraightPositionModeCommand extends Command {
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		if (inputDistance < 0)
-			driveTrain.driveStraight(.7);
+			driveTrain.driveStraight(0.7);
 		else
-			driveTrain.driveStraight(-.7);
+			driveTrain.driveStraight(-0.7);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		// checking to see if the front motors have finished regardless of driving direction
 		// checking to see if the front motors have finished (regardless of what direction the robot is driving)
-		if (inputDistance > 0){
-			return isMotorFinished(0) || isMotorFinished(2);}
-		else{
-			return isMotorFinished(1) || isMotorFinished(3);}
+		if (inputDistance > 0)
+			return isMotorFinished(0) || isMotorFinished(2);
+		else
+			return isMotorFinished(1) || isMotorFinished(3);
 	}
 	private boolean isMotorFinished(int i) {
 		boolean finished = false;
